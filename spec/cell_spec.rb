@@ -42,23 +42,23 @@ describe Cell do
   describe '#next_generation' do
     context 'with fewer than two live neighbours dies' do
       subject { Cell.new(grid, 0, 2, true) }
-      specify { subject.next_generation.live?.should be false }
+      specify { subject.next_generation(double).live?.should be false }
     end
     context 'with two or three live neighbours lives on' do
       subject { Cell.new(grid, 1, 0, true) }
-      specify { subject.next_generation.live?.should be true }
+      specify { subject.next_generation(double).live?.should be true }
     end
     context 'with more than three live neighbours dies' do
       subject { Cell.new(grid, 1, 2, true) }
-      specify { subject.next_generation.live?.should be false }
+      specify { subject.next_generation(double).live?.should be false }
     end
     context 'a dead cell with exactly three live neighbours becomes a live cell' do
       subject { Cell.new(grid, 2, 1, false) }
-      specify { subject.next_generation.live?.should be true }
+      specify { subject.next_generation(double).live?.should be true }
     end
     context 'a dead cell with exactly two live neighbours does not become a live cell' do
       subject { Cell.new(grid, 1, 0, false) }
-      specify { subject.next_generation.live?.should be false }
+      specify { subject.next_generation(double).live?.should be false }
     end
   end
 

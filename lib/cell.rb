@@ -10,7 +10,11 @@ class Cell
     state
   end
 
-  def next_generation
+  def display
+    live? ? '0' : ' '
+  end
+
+  def next_generation(new_grid)
     new_state = false
     case 
     when (neighbour_count < 2 and live?)
@@ -22,7 +26,7 @@ class Cell
     when (neighbour_count == 3 and !live?)
       new_state = true
     end
-    Cell.new(grid, row, pos, new_state)
+    Cell.new(new_grid, row, pos, new_state)
   end
 
   def neighbour_count

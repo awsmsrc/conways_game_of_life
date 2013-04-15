@@ -4,27 +4,34 @@ class Grid
 
   attr_accessor :cells, :width, :height
 
-  def initialize(width, height, random=false)
-    @width, @height, @random = width, height, random
-    @cells = [].tap { |arr| height.times { arr << ([nil] * width) } }
+  def initialize(width, height)
+    @width, @height = width, height
+    @cells = [[]]*height
+  end
 
-    if random
+  def self.random(width, height)
+    new(width, height).tap do |this|
       height.times do |row|
         width.times do |column|
-          @cells[row][column] = Cell.new(self, row, column, [true, false].sample)
+          this.cells[row][column] = Cell.new(this, row, column, [true, false].sample)
         end
       end
     end
   end
 
-  def draw
-    puts "\e[H\e[2J" unless @random
-    @cells.each do |row|
-      output = ''
-      row.each do |cell|
-        output += cell.live? ? '0' : ' '
+  def next_generation
+    new_grid = Grid.new(width, height)
+    height.times do |row|
+      width.times do |column|
+        new_grid.cells[row][column] = cells[row][column].next_generation(new_grid)
       end
-      puts output
+    end
+    new_grid
+  end
+
+  def draw
+    cells.each do |row|
+      puts row.map(&:display).join('')
     end
   end
 end
